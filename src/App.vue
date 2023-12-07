@@ -1,30 +1,188 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div class="container">
+    <h1>ToDo App</h1>
+    <div class="content">
+      <input v-model="task" id="task-name-input" type="text" placeholder="Введіть своє завдання">
+
+      <TaskList :tasks="tasks"></TaskList>
+
+      <div id="info">
+        <p id="counter"></p>
+        <div>
+          <button id="all">Всі</button>
+          <button id="active">Активні</button>
+          <button id="completed">Виконані</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
+<script>
+import TaskList from '@/components/TaskList.vue';
+
+export default {
+  data() {
+    return {
+      tasks: [{ taskName: '1', isCompleted: true }, { taskName: '2', isCompleted: true }, { taskName: '3', isCompleted: false }],
+      task: '',
+    };
+  },
+  methods: {
+    add() {
+    },
+    delete() {
+    },
+  },
+  components: { TaskList }
+}
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat';
+  box-sizing: border-box;
+  outline: none;
+}
+
+body {
+  background: rgb(240, 240, 240);
+  background: linear-gradient(180deg, rgba(240, 240, 240, 1) 0%, rgba(220, 220, 220, 1) 100%) no-repeat;
+  height: 100%;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1 {
   text-align: center;
-  color: #2c3e50;
+  font-size: 10rem;
+  font-weight: 100;
+  color: rgb(170, 170, 170);
+  margin-bottom: 1.5rem;
 }
 
-nav {
-  padding: 30px;
+.content {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.75);
+  border: 3px solid rgb(170, 170, 170);
+  border-top: none;
+  border-bottom: none;
+  margin-bottom: 2rem;
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
+#task-name-input {
+  border: none;
+  border-bottom: 3px solid rgb(170, 170, 170);
+  padding: 1.5rem;
+  width: 1000px;
+  color: rgb(180, 180, 180);
+  font-size: 2rem;
 }
 
-nav a.router-link-exact-active {
-  color: #42b983;
+#task-name-input::placeholder {
+  color: rgb(180, 180, 180);
+}
+
+#start-message {
+  border: none;
+  background: white;
+  border-bottom: 3px solid rgb(170, 170, 170);
+  padding: 1.5rem;
+  width: 1000px;
+  color: rgb(180, 180, 180);
+  font-size: 2rem;
+  text-align: center;
+}
+
+#task-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.task {
+  position: relative;
+  border: none;
+  border-bottom: 3px solid rgb(170, 170, 170);
+  background-color: #fff;
+  padding: 1.5rem;
+  width: 1000px;
+  color: black;
+  font-size: 2rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.task input {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 1rem;
+}
+
+.task input {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: white;
+}
+
+.delete-task {
+  position: absolute;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 4rem;
+  color: rgb(180, 180, 180);
+}
+
+.completed {
+  text-decoration: line-through;
+  color: rgb(180, 180, 180);
+}
+
+#info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  position: relative;
+  width: 100%;
+  background: white;
+}
+
+#info div {
+  margin: 0 auto;
+}
+
+#info button {
+  font-size: 1.5rem;
+  padding: 1rem;
+  border-radius: 5px;
+  border: 3px solid rgb(170, 170, 170);
+  color: rgb(170, 170, 170);
+  background: white;
+  cursor: pointer;
+}
+
+#counter {
+  position: absolute;
+  left: 1rem;
+  font-size: 1.5rem;
+  color: rgb(170, 170, 170);
 }
 </style>
