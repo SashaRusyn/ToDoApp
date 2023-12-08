@@ -1,10 +1,10 @@
 <template>
-  <div class="container">
+  <div class="container" v-on:keydown.enter="add">
     <h1>ToDo App</h1>
     <div class="content">
       <input v-model="task" id="task-name-input" type="text" placeholder="Введіть своє завдання">
 
-      <TaskList :tasks="tasks"></TaskList>
+      <TaskList @delete="deleteTask" @editData="change" v-model:tasks="tasks"></TaskList>
 
       <div id="info">
         <p id="counter"></p>
@@ -22,19 +22,28 @@
 import TaskList from '@/components/TaskList.vue';
 
 export default {
+  components: { TaskList },
   data() {
     return {
-      tasks: [{ taskName: '1', isCompleted: true }, { taskName: '2', isCompleted: true }, { taskName: '3', isCompleted: false }],
+      tasks: [{ id: 1, taskName: '1', isCompleted: true }, { id: 2, taskName: '2', isCompleted: true }, { id: 3, taskName: '3', isCompleted: false }],
       task: '',
     };
   },
   methods: {
     add() {
+      this.tasks.push({ id: Date.now(), taskName: this.task, isCompleted: false });
     },
-    delete() {
+    change(id) {
+      this.tasks.forEach((el) => {
+        if (el.id === id) {
+          el.isCompleted = !el.isCompleted;
+        }
+      })
+    },
+    deleteTask(id) {
+      this.tasks = this.tasks.filter((el) => el.id !== id);
     },
   },
-  components: { TaskList }
 }
 </script>
 
