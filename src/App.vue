@@ -4,14 +4,14 @@
     <div class="content">
       <input v-model="task" id="task-name-input" type="text" placeholder="Введіть своє завдання">
 
-      <TaskList @delete="deleteTask" @editData="change" v-model:tasks="tasks"></TaskList>
+      <TaskList @delete="deleteTask" @editData="change" v-model:tasks="filteredTasks"></TaskList>
 
-      <div id="info">
+      <div class="info">
         <p id="counter"></p>
         <div>
-          <button id="all">Всі</button>
-          <button id="active">Активні</button>
-          <button id="completed">Виконані</button>
+          <button id="all" @click="selectedSort = 'all'" :class="classButton('all')">Всі</button>
+          <button id="active" @click="selectedSort = 'active'" :class="classButton('active')">Активні</button>
+          <button id="completed" @click="selectedSort = 'completed'" :class="classButton('completed')">Виконані</button>
         </div>
       </div>
     </div>
@@ -25,13 +25,21 @@ export default {
   components: { TaskList },
   data() {
     return {
-      tasks: [{ id: 1, taskName: '1', isCompleted: true }, { id: 2, taskName: '2', isCompleted: true }, { id: 3, taskName: '3', isCompleted: false }],
+      tasks: [],
       task: '',
+      selectedSort: 'all',
     };
   },
   methods: {
     add() {
-      this.tasks.push({ id: Date.now(), taskName: this.task, isCompleted: false });
+      this.tasks.filter((task) => { console.log(`${task.taskName == this.task}`); return task.taskName == this.tasks });
+      if (this.tasks.filter((task) => task.taskName == this.tasks).length === 0) {
+        this.tasks.push({ id: Date.now(), taskName: this.task, isCompleted: false });
+        this.task = '';
+        this.save();
+      } else {
+        alert('This task is exist');
+      };
     },
     change(id) {
       this.tasks.forEach((el) => {
@@ -39,11 +47,33 @@ export default {
           el.isCompleted = !el.isCompleted;
         }
       })
+      this.save();
     },
     deleteTask(id) {
       this.tasks = this.tasks.filter((el) => el.id !== id);
+      this.save();
+    },
+    save() {
+      localStorage.setItem("tasks", JSON.stringify(this.tasks));
+    },
+    classButton(text) {
+      return {
+        'active-button': text === this.selectedSort,
+        'disactive-button': text !== this.selectedSort
+      }
+    }
+  },
+  computed: {
+    filteredTasks() {
+      if (this.selectedSort === 'all') {
+        return this.tasks;
+      }
+      return this.tasks.filter((task) => task.isCompleted === (this.selectedSort === 'completed'));
     },
   },
+  mounted() {
+    this.tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+  }
 }
 </script>
 
@@ -164,7 +194,7 @@ h1 {
   color: rgb(180, 180, 180);
 }
 
-#info {
+.info {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -174,17 +204,17 @@ h1 {
   background: white;
 }
 
-#info div {
+.info div {
   margin: 0 auto;
 }
 
-#info button {
+.info button {
   font-size: 1.5rem;
   padding: 1rem;
   border-radius: 5px;
   border: 3px solid rgb(170, 170, 170);
   color: rgb(170, 170, 170);
-  background: white;
+  /* background: white; */
   cursor: pointer;
 }
 
@@ -193,5 +223,13 @@ h1 {
   left: 1rem;
   font-size: 1.5rem;
   color: rgb(170, 170, 170);
+}
+
+.active-button {
+  background: rgb(230, 230, 230);
+}
+
+.disactive-button {
+  background: white;
 }
 </style>
