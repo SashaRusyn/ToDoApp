@@ -32,8 +32,7 @@ export default {
   },
   methods: {
     add() {
-      this.tasks.filter((task) => { console.log(`${task.taskName == this.task}`); return task.taskName == this.tasks });
-      if (this.tasks.filter((task) => task.taskName == this.tasks).length === 0) {
+      if (this.tasks.filter((task) => task.taskName == this.task).length === 0) {
         this.tasks.push({ id: Date.now(), taskName: this.task, isCompleted: false });
         this.task = '';
         this.save();
@@ -42,9 +41,9 @@ export default {
       };
     },
     change(id) {
-      this.tasks.forEach((el) => {
-        if (el.id === id) {
-          el.isCompleted = !el.isCompleted;
+      this.tasks.forEach((task) => {
+        if (task.id === id) {
+          task.isCompleted = !task.isCompleted;
         }
       })
       this.save();
@@ -89,6 +88,7 @@ export default {
 }
 
 body {
+  font-family: 'Montserrat';
   background: rgb(240, 240, 240);
   background: linear-gradient(180deg, rgba(240, 240, 240, 1) 0%, rgba(220, 220, 220, 1) 100%) no-repeat;
   height: 100%;
